@@ -28,7 +28,6 @@ const deathImage = document.getElementById('death-image');
 const flashOverlay = document.getElementById('flash-overlay');
 const deathMessageElement = document.getElementById('death-message');
 
-// Audio element for background music
 const backgroundMusic = document.getElementById('background-music');
 
 let hungerInterval;
@@ -79,6 +78,9 @@ function handleStopPlaying() {
     playButton.innerText = "Play";
     petImageElement.classList.remove('bouncing');
     playDuration = 0;
+
+    clearInterval(playInterval);
+    playInterval = null;
 
     clearInterval(happinessInterval);
     happinessInterval = setInterval(() => {
@@ -190,7 +192,6 @@ function handleDeath(message) {
     clearInterval(happinessInterval);
     clearInterval(playInterval);
 
-    // Stop the background music
     backgroundMusic.pause();
 
     const dvdBumper = document.getElementById('dvd-bumper');
@@ -220,7 +221,6 @@ function openPetModal() {
     isPetModalOpen = true;
     updateStatus();
 
-    // Start the background music
     backgroundMusic.play();
 }
 
@@ -231,7 +231,25 @@ function closePetModal() {
 
 function closeDeathModal() {
     document.getElementById('death-modal').style.display = 'none';
-    closePetModal();
+    closePetModal(); 
+
+    resetGameState();
+}
+
+function resetGameState() {
+    happiness = 50;
+    hunger = 10;
+    energy = 50;
+    isSleeping = false;
+    isPetModalOpen = false;
+    playDuration = 0;
+
+    clearInterval(hungerInterval);
+    clearInterval(sleepInterval);
+    clearInterval(happinessInterval);
+    clearInterval(playInterval);
+
+    updateStatus();
 }
 
 hungerInterval = setInterval(() => {
