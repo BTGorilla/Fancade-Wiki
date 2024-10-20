@@ -1,0 +1,150 @@
+.modal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 500;
+}
+
+.modal-content {
+    background: linear-gradient(to bottom, #424fd7, #4a90e2);
+    color: #fff;
+    text-align: center;
+    width: 300px;
+    height: 500px;
+    border-radius: 15px;
+    padding: 20px;
+    position: relative;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+}
+
+.modal-header {
+    font-size: 24px;
+    /* Consistent font size */
+    margin-bottom: 15px;
+    /* Space between header and image */
+}
+
+.modal-image {
+    width: 100px;
+    /* Set a consistent width for images */
+    margin-bottom: 15px;
+    /* Space between image and content */
+}
+
+#death-modal .modal-content {
+    background: linear-gradient(to bottom, #000, #8B0000, #000);
+}
+
+#pet-image {
+    width: 100px;
+    transition: transform 0.2s ease;
+}
+
+#death-image {
+    width: 100px;
+    transition: transform 0.2s ease;
+    animation: jitter 0.1s infinite;
+    --x: 1;
+    --y: 1;
+}
+
+.flash-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(255, 0, 0, 0.8);
+    z-index: 502;
+    display: none;
+    opacity: 0;
+    transition: opacity 1s ease;
+}
+
+.bouncing {
+    animation: bounce 0.5s infinite alternate;
+}
+
+.sleeping {
+    transform: scaleY(0.5);
+}
+
+@keyframes bounce {
+    from {
+        transform: translateY(0);
+    }
+
+    to {
+        transform: translateY(-10px);
+    }
+}
+
+.zs {
+    font-size: 20px;
+    color: white;
+    animation: float 1s infinite;
+    position: absolute;
+    top: 120px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+
+    100% {
+        transform: translateY(0);
+    }
+}
+
+button {
+    background-color: #ff6600;
+    color: #222;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 15px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    margin: 5px;
+}
+
+button:hover {
+    background-color: #ffb300;
+    transform: scale(1.05);
+}
+
+button:active {
+    transform: scale(0.95);
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: red;
+    text-decoration: none;
+    cursor: pointer;
+}
