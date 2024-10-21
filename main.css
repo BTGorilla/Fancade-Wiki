@@ -1,0 +1,230 @@
+body {
+    font-family: 'Courier New', Courier, monospace;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(to bottom, #000000, #8B0000);
+    color: #eee;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.no-cursor {
+    cursor: default;
+}
+
+.header {
+    background-color: #000;
+    color: #ff0000;
+    text-align: center;
+    padding: 20px 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 48px;
+    text-shadow: 2px 2px 4px #000;
+}
+
+.nav {
+    background-color: #222;
+    padding: 10px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+}
+
+.nav a {
+    color: #ff0000;
+    text-decoration: none;
+    margin: 0 15px;
+    font-size: 18px;
+    transition: color 0.3s;
+    cursor: pointer;
+}
+
+.nav a:hover {
+    color: #ff6666;
+    text-decoration: underline;
+}
+
+.content {
+    padding: 20px;
+    text-align: left;
+    flex: 1;
+    background-color: rgba(0, 0, 0, 0.8);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    margin: 20px;
+    border-radius: 10px;
+    display: none;
+    z-index: 2;
+}
+
+.content.active {
+    display: block;
+}
+
+.content h2 {
+    color: #ff0000;
+    font-size: 24px;
+    text-shadow: 2px 2px 4px #000;
+}
+
+.content p {
+    font-size: 16px;
+    margin: 10px 0;
+    line-height: 1.6;
+}
+
+.content p strong {
+    text-decoration: underline;
+    color: #ff6666;
+}
+
+.cards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 20px;
+}
+
+.card {
+    background-color: #333;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    margin: 10px;
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+    width: 180px;
+    cursor: pointer;
+    animation: jitter 0.2s infinite;
+}
+
+.card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 16px rgba(255, 0, 0, 0.8);
+    animation: jitter 0.1s infinite;
+}
+
+.card img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+}
+
+.card h3 {
+    color: #ff0000;
+    font-size: 20px;
+    margin: 10px;
+    text-align: center;
+}
+
+#dvd-bumper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50px;
+    height: 50px;
+    z-index: 4;
+    display: none;
+}
+
+.footer {
+    background-color: #222;
+    text-align: center;
+    padding: 10px 0;
+    box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.5);
+}
+
+@keyframes jitter {
+
+    0%,
+    100% {
+        transform: translate(0, 0);
+    }
+
+    25% {
+        transform: translate(calc(var(--x) * 2px), calc(var(--y) * 2px));
+    }
+
+    50% {
+        transform: translate(calc(var(--x) * -2px), calc(var(--y) * -2px));
+    }
+
+    75% {
+        transform: translate(calc(var(--x) * -2px), calc(var(--y) * 2px));
+    }
+}
+
+.card:nth-child(1),
+.card:nth-child(5) {
+    --x: -1;
+    --y: 1;
+}
+
+.card:nth-child(2),
+.card:nth-child(6) {
+    --x: 1;
+    --y: -1;
+}
+
+.card:nth-child(3) {
+    --x: -1;
+    --y: -1;
+}
+
+.card:nth-child(4) {
+    --x: 1;
+    --y: 1;
+}
+
+@keyframes rain {
+    0% {
+        transform: translateY(-100vh);
+    }
+
+    100% {
+        transform: translateY(170vh);
+    }
+}
+
+.rain-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    pointer-events: none;
+    z-index: -1;
+}
+
+.rain {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 5vh;
+    background: red;
+    animation: rain 1s linear infinite;
+    opacity: 0.4;
+    z-index: -1;
+}
+
+.larger-rain {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 2.5px;
+    height: 10vh;
+    background: red;
+    animation: rain 1.5s linear infinite;
+    opacity: 0.6;
+}
+
+.rain:nth-child(odd) {
+    animation-duration: 1.5s;
+}
+
+.rain:nth-child(even) {
+    animation-duration: 1.2s;
+}
