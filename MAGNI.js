@@ -83,7 +83,7 @@ function nextDialogue() {
             wakeUpDialogueShown = true;
             isClickDisabled = true;
             setTimeout(() => {
-                window.close();
+                window.history.back();
             }, 1000);
         }
     }, 1000);
@@ -106,12 +106,20 @@ window.addEventListener("click", () => {
 window.addEventListener("mousemove", (e) => {
     pupils.forEach((pupil) => {
         var rect = pupil.getBoundingClientRect();
-        var x = (e.pageX - rect.left) / 55 + "px";
-        var y = (e.pageY - rect.top) / 55 + "px";
+        var x = (e.pageX - rect.left) / 75 + "px";
+        var y = (e.pageY - rect.top) / 75 + "px";
         pupil.style.transform = "translate3d(" + x + "," + y + ", 0px)";
     });
 });
 
 document.getElementById("magni").addEventListener("contextmenu", (e) => {
     e.preventDefault();
+});
+
+const wind = document.getElementById("wind");
+
+window.addEventListener("click", () => {
+    wind.play().catch(error => {
+        console.error("Audio playback failed:", error);
+    });
 });
