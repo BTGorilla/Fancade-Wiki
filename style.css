@@ -9,6 +9,38 @@ body {
     min-height: 100vh;
 }
 
+.warning-screen {
+    font-size: 130%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+}
+
+.warning-content {
+    text-align: center;
+}
+
+#proceed-button {
+    background-color: #ff0000;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#proceed-button:hover {
+    background-color: #ff6666;
+}
+
 .modal {
     display: none;
 }
@@ -99,15 +131,13 @@ body {
     margin: 10px;
     overflow: hidden;
     transition: transform 0.3s, box-shadow 0.3s;
-    width: 180px;
+    width: 200px;
     cursor: pointer;
     animation: jitter 0.2s infinite;
 }
 
 .card:hover {
-    transform: scale(1.05);
     box-shadow: 0 8px 16px rgba(255, 0, 0, 0.8);
-    animation: jitter 0.1s infinite;
 }
 
 .card img {
@@ -161,23 +191,27 @@ body {
 }
 
 .card:nth-child(1),
-.card:nth-child(5) {
+.card:nth-child(5),
+.card:nth-child(7) {
     --x: -1;
     --y: 1;
 }
 
 .card:nth-child(2),
-.card:nth-child(6) {
+.card:nth-child(6),
+.card:nth-child(8) {
     --x: 1;
     --y: -1;
 }
 
-.card:nth-child(3) {
+.card:nth-child(3),
+.card:nth-child(9) {
     --x: -1;
     --y: -1;
 }
 
-.card:nth-child(4) {
+.card:nth-child(4),
+.card:nth-child(10) {
     --x: 1;
     --y: 1;
 }
@@ -210,7 +244,7 @@ body {
     height: 5vh;
     background: red;
     animation: rain 1s linear infinite;
-    opacity: 0.4;
+    opacity: 0.6;
     z-index: -1;
 }
 
@@ -222,7 +256,7 @@ body {
     height: 10vh;
     background: red;
     animation: rain 1.5s linear infinite;
-    opacity: 0.6;
+    opacity: 0.8;
 }
 
 .rain:nth-child(odd) {
@@ -236,7 +270,128 @@ body {
 .magni {
     display: block;
     position: absolute;
-    top: 160%;
+    top: 230vh;
+    left: 60vw;
+    transform: translate(-50%, -50%);
+    opacity: 0.03;
+}
+
+#longcat1 {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    z-index: 5;
+    height: 40px;
+    width: auto;
+    transition: bottom 0.5s ease;
+}
+
+.longcat2 {
+    position: fixed;
+    right: 0;
+    z-index: 4;
+    height: 40px;
+    width: auto;
+}
+
+#longcat1:hover {
+    animation: jitter 0.1s infinite;
+    --x: 1;
+    --y: 1;
+}
+
+.particle {
+    position: fixed;
+    width: 7px;
+    height: 7px;
+    background-color: rgb(200, 9, 9);
+    border-radius: 50%;
+    pointer-events: none;
+    animation: explode 0.5s forwards;
+    z-index: 10;
+}
+
+@keyframes explode {
+    0% {
+        transform: translate(0, 0);
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        transform: translate(var(--x), var(--y));
+        opacity: 0;
+    }
+}
+
+#error-modal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 10;
+}
+
+.error-modal-content {
+    background: #fff;
+    color: #333;
+    text-align: center;
+    width: 90%;
+    max-width: 400px;
+    border-radius: 12px;
+    position: relative;
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.3);
+}
+
+.error-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #d9534f;
+    color: #fff;
+    height: 50px;
+    padding: 0 15px;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    width: 92.5%;
+}
+
+.error-modal-content h2 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.error-modal-content p {
+    margin: 10px 0 20px;
+    line-height: 1.5;
+}
+
+.error-icon {
+    font-size: 50px;
+    margin-bottom: 15px;
+    color: #d9534f;
+}
+
+.close-error-modal {
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.door {
+    display: none;
+    position: fixed;
+    top: 50%;
     left: 50%;
-    opacity: 0.02;
+    transform: translate(-50%, -50%);
 }
