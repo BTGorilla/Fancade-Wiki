@@ -30,16 +30,12 @@
 
 .modal-header {
     font-size: 24px;
-    /* Consistent font size */
     margin-bottom: 15px;
-    /* Space between header and image */
 }
 
 .modal-image {
     width: 100px;
-    /* Set a consistent width for images */
     margin-bottom: 15px;
-    /* Space between image and content */
 }
 
 #death-modal .modal-content {
@@ -127,7 +123,6 @@ button {
 }
 
 button:hover {
-    background-color: #ffb300;
     transform: scale(1.05);
 }
 
