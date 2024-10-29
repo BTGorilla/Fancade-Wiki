@@ -27,13 +27,24 @@ const petContainer = document.getElementById('pet-container');
 const deathImage = document.getElementById('death-image');
 const flashOverlay = document.getElementById('flash-overlay');
 const deathMessageElement = document.getElementById('death-message');
-
 const backgroundMusic = document.getElementById('background-music');
 
 let hungerInterval;
 let sleepInterval;
 let happinessInterval;
 let playInterval;
+let isSweatsmileDead = false;
+
+if (localStorage.getItem('sweatsmileDead') === 'true') {
+    isSweatsmileDead = true;
+}
+
+if (localStorage.getItem('dvdBumperImage') === 'changed') {
+    const dvdBumper = document.getElementById('dvd-bumper');
+    dvdBumper.src = "https://files.catbox.moe/6x2fl9.webp";
+    dvdBumper.style.width = "50px";
+    dvdBumper.style.height = "50px";
+}
 
 function updateStatus() {
     happinessElement.innerText = happiness;
@@ -41,15 +52,29 @@ function updateStatus() {
     energyElement.innerText = energy;
 }
 
+function changeHappiness(amount) {
+    happiness = Math.min(MAX_HAPPINESS, Math.max(MIN_HAPPINESS, happiness + amount));
+    updateStatus();
+}
+
+function changeHunger(amount) {
+    hunger = Math.max(0, hunger + amount);
+    updateStatus();
+}
+
+function changeEnergy(amount) {
+    energy = Math.min(100, Math.max(0, energy + amount));
+    updateStatus();
+}
+
 function feedPet() {
     if (hunger > 0) {
-        hunger = Math.max(0, hunger - HUNGER_DECREASE);
-        happiness = Math.min(MAX_HAPPINESS, happiness + HAPPINESS_INCREASE_FEED);
+        changeHunger(-HUNGER_DECREASE);
+        changeHappiness(HAPPINESS_INCREASE_FEED);
         petMessageElement.innerText = "Yum! Sweatsmile loves the food!";
     } else {
         setTimeout(checkDeath, 100);
     }
-    updateStatus();
 }
 
 function playWithPet() {
@@ -64,12 +89,11 @@ function playWithPet() {
     } else {
         startPlaying();
     }
-    updateStatus();
 }
 
 function handleStopPlaying() {
     if (playDuration < 3) {
-        happiness = Math.max(MIN_HAPPINESS, happiness - HAPPINESS_DECREASE_PLAY_SHORT);
+        changeHappiness(-HAPPINESS_DECREASE_PLAY_SHORT);
         petMessageElement.innerText = "Sweatsmile is sad you stopped playing so soon!";
     } else {
         petMessageElement.innerText = "Sweatsmile is done playing!";
@@ -82,18 +106,16 @@ function handleStopPlaying() {
     clearInterval(playInterval);
     playInterval = null;
 
-    clearInterval(happinessInterval);
     happinessInterval = setInterval(() => {
         if (!isSleeping) {
-            happiness = Math.max(MIN_HAPPINESS, happiness - HAPPINESS_DECREASE);
-            updateStatus();
+            changeHappiness(-HAPPINESS_DECREASE);
         }
     }, 1000);
 }
 
 function startPlaying() {
     if (energy > 0) {
-        happiness = Math.min(MAX_HAPPINESS, happiness + 2);
+        changeHappiness(2);
         petMessageElement.innerText = "Sweatsmile is having fun!";
         playButton.innerText = "Stop Playing";
         petImageElement.classList.add('bouncing');
@@ -102,9 +124,8 @@ function startPlaying() {
         clearInterval(happinessInterval);
         playInterval = setInterval(() => {
             if (energy > 0) {
-                energy = Math.max(0, energy - ENERGY_DECREASE_PLAY);
-                happiness = Math.min(MAX_HAPPINESS, happiness + 2);
-                updateStatus();
+                changeEnergy(-ENERGY_DECREASE_PLAY);
+                changeHappiness(2);
 
                 if (energy < 12) {
                     petMessageElement.innerText = "Sweatsmile can't play much longer.";
@@ -147,8 +168,8 @@ function putPetToSleep() {
     clearInterval(happinessInterval);
     clearInterval(playInterval);
     sleepInterval = setInterval(() => {
-        happiness = Math.max(MIN_HAPPINESS, happiness - HAPPINESS_DECREASE_SLEEP);
-        energy = Math.min(100, energy + ENERGY_INCREASE_SLEEP);
+        changeHappiness(-HAPPINESS_DECREASE_SLEEP);
+        changeEnergy(ENERGY_INCREASE_SLEEP);
         updateStatus();
         checkDeath();
     }, 1000);
@@ -172,16 +193,18 @@ function wakePet() {
 
 function checkDeath() {
     if (document.getElementById('pet-modal').style.display === 'block') {
-        if (hunger >= 100) {
-            handleDeath("Sweatsmile starved to death.");
-        } else if (hunger === 0) {
-            handleDeath("Sweatsmile got overfed and died.");
-        } else if (energy === 0) {
-            handleDeath("Sweatsmile died of sleep deprivation.");
-        } else if (energy === 100 && isSleeping) {
-            handleDeath("Sweatsmile died in their sleep.");
-        } else if (happiness === 0) {
-            handleDeath("Sweatsmile died from depression.");
+        const deathConditions = {
+            "Sweatsmile starved to death.": hunger >= 100,
+            "Sweatsmile got overfed and died.": hunger === 0,
+            "Sweatsmile died of sleep deprivation.": energy === 0,
+            "Sweatsmile died in its sleep.": energy === 100 && isSleeping,
+            "Sweatsmile died from depression.": happiness === 0
+        };
+        for (const [message, condition] of Object.entries(deathConditions)) {
+            if (condition) {
+                handleDeath(message);
+                return;
+            }
         }
     }
 }
@@ -210,51 +233,44 @@ function handleDeath(message) {
             flashOverlay.style.display = 'none';
         }, 1000);
     }, 500);
+
+    isSweatsmileDead = true;
+    localStorage.setItem('sweatsmileDead', 'true');
+    localStorage.setItem('dvdBumperImage', 'changed');
 }
 
 function openDeathModal() {
     document.getElementById('death-modal').style.display = 'block';
 }
 
-function openPetModal() {
-    document.getElementById('pet-modal').style.display = 'block';
-    isPetModalOpen = true;
-    updateStatus();
-
-    backgroundMusic.play();
-}
-
 function closePetModal() {
+    backgroundMusic.pause();
+    backgroundMusic.currentTime = 0;
+
     document.getElementById('pet-modal').style.display = 'none';
     isPetModalOpen = false;
 }
 
-function closeDeathModal() {
-    document.getElementById('death-modal').style.display = 'none';
-    closePetModal(); 
+function openPetModal() {
+    if (isSweatsmileDead) {
+        openDeathModal();
+    } else {
+        document.getElementById('pet-modal').style.display = 'block';
+        isPetModalOpen = true;
+        updateStatus();
 
-    resetGameState();
+        backgroundMusic.play();
+    }
 }
 
-function resetGameState() {
-    happiness = 50;
-    hunger = 10;
-    energy = 50;
-    isSleeping = false;
-    isPetModalOpen = false;
-    playDuration = 0;
-
-    clearInterval(hungerInterval);
-    clearInterval(sleepInterval);
-    clearInterval(happinessInterval);
-    clearInterval(playInterval);
-
-    updateStatus();
+function closeDeathModal() {
+    document.getElementById('death-modal').style.display = 'none';
+    closePetModal();
 }
 
 hungerInterval = setInterval(() => {
     if (!isSleeping && !playInterval && isPetModalOpen) {
-        hunger = Math.min(100, hunger + HUNGER_INCREASE);
+        changeHunger(HUNGER_INCREASE);
         updateStatus();
     }
     checkDeath();
@@ -262,7 +278,7 @@ hungerInterval = setInterval(() => {
 
 happinessInterval = setInterval(() => {
     if (!isSleeping && isPetModalOpen) {
-        happiness = Math.max(MIN_HAPPINESS, happiness - HAPPINESS_DECREASE);
+        changeHappiness(-HAPPINESS_DECREASE);
         updateStatus();
     }
 }, 1000);
