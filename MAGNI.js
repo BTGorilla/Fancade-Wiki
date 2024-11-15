@@ -71,6 +71,9 @@ function startContinuousJitter() {
 }
 
 function nextDialogue() {
+
+    console.log("Clcik locked")
+    isClickDisabled = true; //Locks this function from getting called again whilst the animations are playing
     dialogueContainer.classList.remove('fade-in');
     dialogueContainer.classList.add('fade-out');
 
@@ -81,26 +84,26 @@ function nextDialogue() {
 
         if (currentDialogueIndex === dialogues.length - 1) {
             wakeUpDialogueShown = true;
-            isClickDisabled = true;
             setTimeout(() => {
                 window.history.back();
             }, 1000);
         }
+        isClickDisabled = false; //Unlocks this function
     }, 1000);
 }
 
 window.addEventListener("click", () => {
-    if (isClickDisabled) {
-        return;
-    }
-
-    if (!dialogueShown) {
-        dialogueShown = true;
-        showDialogue();
-    } else if (wakeUpDialogueShown) {
-    } else {
+    if (!isClickDisabled) {
         nextDialogue();
     }
+
+    //if (!dialogueShown) {
+    //    dialogueShown = true;
+    //    showDialogue();
+    //} else if (wakeUpDialogueShown) {
+    //} else {
+    //    nextDialogue();
+    //}
 });
 
 window.addEventListener("mousemove", (e) => {
@@ -116,7 +119,7 @@ document.getElementById("magni").addEventListener("contextmenu", (e) => {
     e.preventDefault();
 });
 
-const wind = document.getElementById("wind");
+const wind = document.getElementById("background-music");
 
 window.addEventListener("click", () => {
     wind.play().catch(error => {
