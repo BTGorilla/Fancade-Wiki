@@ -72,7 +72,6 @@ function startContinuousJitter() {
 
 function nextDialogue() {
 
-    console.log("Clcik locked")
     isClickDisabled = true; //Locks this function from getting called again whilst the animations are playing
     dialogueContainer.classList.remove('fade-in');
     dialogueContainer.classList.add('fade-out');
