@@ -45,9 +45,9 @@ let dialogueShown = false;
 let wakeUpDialogueShown = false;
 let isClickDisabled = false;
 
-function showDialogue() {
+function showDialogue(Ind) {
     dialogueContainer.textContent = "";
-    const currentDialogue = dialogues[currentDialogueIndex];
+    const currentDialogue = dialogues[Ind];
 
     for (let char of currentDialogue) {
         const span = document.createElement("span");
@@ -72,14 +72,15 @@ function startContinuousJitter() {
 
 function nextDialogue() {
 
+    console.log("Clcik locked")
     isClickDisabled = true; //Locks this function from getting called again whilst the animations are playing
     dialogueContainer.classList.remove('fade-in');
     dialogueContainer.classList.add('fade-out');
 
     setTimeout(() => {
-        currentDialogueIndex = (currentDialogueIndex + 1) % dialogues.length;
         dialogueContainer.classList.remove('fade-out');
-        showDialogue();
+        showDialogue(currentDialogueIndex);
+        currentDialogueIndex = (currentDialogueIndex + 1) % dialogues.length;
 
         if (currentDialogueIndex === dialogues.length - 1) {
             wakeUpDialogueShown = true;
